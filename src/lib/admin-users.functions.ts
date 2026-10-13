@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireSupabaseAuth } from "@/lib/supabase/auth-middleware";
 
 export type ManagedRole = "admin" | "staff" | "customer";
 export type AccountStatus = "active" | "disabled" | "pending";
@@ -38,7 +38,7 @@ export const listAccounts = createServerFn({ method: "GET" })
     const { supabase, userId } = context;
     await assertOwner(supabase as never, userId);
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } = await import("@/lib/supabase/client.server");
     const [{ data: profiles }, { data: roles }, authUsers] = await Promise.all([
       supabaseAdmin.from("profiles").select("id,full_name,email,phone,account_status,is_owner,created_at"),
       supabaseAdmin.from("user_roles").select("user_id,role"),
@@ -86,7 +86,7 @@ export const createStaffAccount = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase as never, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } = await import("@/lib/supabase/client.server");
 
     const email = data.email.toLowerCase();
     const created = await supabaseAdmin.auth.admin.createUser({
@@ -117,7 +117,7 @@ export const setAccountRole = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase as never, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } = await import("@/lib/supabase/client.server");
 
     const { data: target } = await supabaseAdmin
       .from("profiles")
@@ -141,7 +141,7 @@ export const setAccountStatus = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase as never, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } = await import("@/lib/supabase/client.server");
 
     const { data: target } = await supabaseAdmin
       .from("profiles")
@@ -172,7 +172,7 @@ export const deleteAccount = createServerFn({ method: "POST" })
     await assertOwner(context.supabase as never, context.userId);
     if (data.userId === context.userId) throw new Error("You cannot delete your own account.");
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } = await import("@/lib/supabase/client.server");
     const { data: target } = await supabaseAdmin
       .from("profiles")
       .select("is_owner")
@@ -191,7 +191,7 @@ export const resetStaffPassword = createServerFn({ method: "POST" })
   .inputValidator((input) => uuid.extend({ password: z.string().min(8).max(72) }).parse(input))
   .handler(async ({ data, context }) => {
     await assertOwner(context.supabase as never, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } = await import("@/lib/supabase/client.server");
     const { error } = await supabaseAdmin.auth.admin.updateUserById(data.userId, {
       password: data.password,
     });

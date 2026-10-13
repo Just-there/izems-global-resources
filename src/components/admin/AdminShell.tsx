@@ -18,7 +18,7 @@ import {
   ExternalLink,
   FileText,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import logo from "@/assets/izems-logo.png";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

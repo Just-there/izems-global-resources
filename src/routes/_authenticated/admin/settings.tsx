@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ImagePlus } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import { uploadMedia } from "@/lib/media";
 import { PageHeader } from "@/components/admin/AdminShell";
 import { Label } from "@/components/ui/label";

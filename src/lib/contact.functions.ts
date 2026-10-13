@@ -14,7 +14,7 @@ export const submitContact = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import(
-      "@/integrations/supabase/client.server"
+      "@/lib/supabase/client.server"
     );
     const { error } = await supabaseAdmin.from("messages").insert({
       name: data.name,
@@ -37,7 +37,7 @@ export const subscribeNewsletter = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => newsletterSchema.parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import(
-      "@/integrations/supabase/client.server"
+      "@/lib/supabase/client.server"
     );
     const { error } = await supabaseAdmin
       .from("newsletter_subscribers")

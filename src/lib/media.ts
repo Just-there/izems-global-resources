@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 
 /** Public URL served through our proxy route for a stored media path. */
 export function mediaUrl(path: string): string {

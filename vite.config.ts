@@ -1,20 +1,25 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - tanstackStart, viteReact, tailwindcss, tsConfigPaths, nitro (build-only using cloudflare as a default target),
-//     componentTagger (dev-only), VITE_* env injection, @ path alias, React/TanStack dedupe,
-//     error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+// Standalone Vite config — no hosting-vendor plugins.
+import { defineConfig } from "vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import tsConfigPaths from "vite-tsconfig-paths";
+import { nitro } from "nitro/vite";
 
-// Deploy target: Lovable/Cloudflare by default. On Vercel (VERCEL=1 is set by
-// their build environment) or when DEPLOY_PRESET is provided, pin that Nitro preset.
-const deployPreset = process.env.DEPLOY_PRESET ?? (process.env.VERCEL ? "vercel" : undefined);
+// Nitro preset: Vercel sets VERCEL=1 automatically. Override with DEPLOY_PRESET
+// (e.g. "node-server", "netlify"). Defaults to a Cloudflare-style worker in dist/.
+const preset = process.env.DEPLOY_PRESET ?? (process.env.VERCEL ? "vercel" : "cloudflare-module");
+// Vercel needs its own output folder; every other target writes to dist/.
+const output = preset === "vercel" ? {} : { output: { dir: "dist" } };
 
-export default defineConfig({
-  tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
-  },
-  ...(deployPreset ? { nitro: { preset: deployPreset } } : {}),
-});
+export default defineConfig(({ command }) => ({
+  server: { host: "::", port: 8080 },
+  resolve: { dedupe: ["react", "react-dom", "@tanstack/react-router", "@tanstack/react-start"] },
+  plugins: [
+    tsConfigPaths({ projects: ["./tsconfig.json"] }),
+    tailwindcss(),
+    tanstackStart({ server: { entry: "server" } }),
+    ...(command === "build" ? [nitro({ preset, ...output })] : []),
+    viteReact(),
+  ],
+}));

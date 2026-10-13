@@ -11,7 +11,7 @@ import {
   Pencil,
   ClipboardList,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import { PageHeader, Button } from "@/components/admin/AdminShell";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,7 +52,7 @@ import {
   type Tone,
 } from "@/lib/admin-ui";
 import { cn } from "@/lib/utils";
-import type { Database } from "@/integrations/supabase/types";
+import type { Database } from "@/lib/supabase/types";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({
   component: OrdersAdmin,

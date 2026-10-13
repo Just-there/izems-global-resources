@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 
 /** Format a number as Nigerian Naira. */
 export function formatCurrency(value: number | null | undefined): string {

@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
+import type { Database } from "@/lib/supabase/types";
 
 /** Public, read-only Supabase client (publishable key, no session). */
 function createPublicClient() {

@@ -22,7 +22,7 @@ export const submitQuote = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => quoteSchema.parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import(
-      "@/integrations/supabase/client.server"
+      "@/lib/supabase/client.server"
     );
     const { data: inserted, error } = await supabaseAdmin
       .from("quotes")

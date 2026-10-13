@@ -11,7 +11,7 @@ import {
   Pencil,
   Boxes,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import { PageHeader, Button } from "@/components/admin/AdminShell";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

@@ -32,7 +32,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import { PageHeader } from "@/components/admin/AdminShell";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDateTime, humanize } from "@/lib/admin-ui";
